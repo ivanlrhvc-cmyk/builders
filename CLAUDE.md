@@ -1,15 +1,22 @@
 # CLAUDE.md — Builders
 
-> Léelo siempre al inicio de sesión junto con memory/MEMORY.md. Nada más.
+> Léelo siempre al inicio de sesión junto con memory/MEMORY.md y SESSIONS.md. Nada más.
 
 ---
 
 ## Instrucciones operativas
 
 **Inicio de sesión:**
-1. Leer este archivo + `memory/MEMORY.md` — nada más hasta que la tarea lo requiera
-2. No leer código salvo que sea estrictamente necesario para la tarea
-3. Confirmar con el usuario el objetivo de la sesión antes de actuar
+1. Leer este archivo + `memory/MEMORY.md` + `SESSIONS.md` — en paralelo, nada más hasta que la tarea lo requiera
+2. Si `HANDOFF.md` existe y no contiene `_Sin handoff pendiente._`: leerlo, auditarlo, y vaciarlo escribiendo solo `_Sin handoff pendiente._` en el body
+3. Confirmar con Ivan: sesión actual según SESSIONS.md + cualquier HANDOFF pendiente
+4. No leer código salvo que sea estrictamente necesario para la tarea
+
+**Al terminar una sesión asignada a Claude Code:**
+- Actualizar `SESSIONS.md`: mover la sesión actual a Completadas, promover la siguiente a CURRENT
+- Guardar memoria con estado actualizado
+- Si se modificaron >3 archivos: auditoría antes de cerrar
+- Verificar build limpio
 
 **Durante la sesión:**
 - Agrupar lecturas independientes en paralelo (un solo mensaje, múltiples tool calls)
@@ -34,7 +41,7 @@
 ## Reglas de código
 
 1. Una responsabilidad por archivo — no mezclar lógica con UI
-2. CSS en `src/styles/main.css` — único archivo con variables, sin Tailwind
+2. CSS dividido por dominio en `src/styles/` — `main.css` es solo entry point de `@import`s. Archivos: `base.css` (variables + reset + keyframes), `layout.css` (nav + buttons + sections + footer), `home.css` (hero + feed + search), `modal.css`, `profile.css`, `auth.css`, `dashboard.css`, `responsive.css` (importado último). Sin Tailwind.
 3. Sin dependencias externas salvo React y Formspree
 4. Links externos siempre con `target="_blank" rel="noopener noreferrer"`
 5. Variables de entorno en `.env.local` — nunca en código

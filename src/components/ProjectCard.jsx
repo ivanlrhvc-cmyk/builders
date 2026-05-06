@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 const STATUS = {
   live:        { label: 'En vivo',          color: '#1a7a5e' },
   demo:        { label: 'Demo interactiva', color: '#1d5fa8' },
@@ -7,28 +5,11 @@ const STATUS = {
   concept:     { label: 'Concepto',         color: '#8c8a85' },
 }
 
-const CTA = {
-  live:        { label: 'Abrir app' },
-  demo:        { label: 'Probar demo' },
-  development: { label: 'Ver más' },
-  concept:     { label: 'Ver idea' },
-}
-
-export default function ProjectCard({ project }) {
-  const [expanded, setExpanded] = useState(false)
+export default function ProjectCard({ project, onClick }) {
   const status = STATUS[project.status]
-  const cta = CTA[project.status]
-
-  const handleCta = () => {
-    if (project.status === 'live' && project.url) {
-      window.open(project.url, '_blank', 'noopener,noreferrer')
-    } else {
-      setExpanded((v) => !v)
-    }
-  }
 
   return (
-    <article className="project-card">
+    <article className="project-card" onClick={onClick} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && onClick()}>
       <div className="project-card-header">
         <h3 className="project-name">{project.name}</h3>
         <span className="project-status" style={{ color: status.color }}>
@@ -48,27 +29,15 @@ export default function ProjectCard({ project }) {
         ))}
       </div>
 
-      {expanded && project.highlights && (
-        <ul className="project-highlights">
-          {project.highlights.map((h) => (
-            <li key={h}>{h}</li>
-          ))}
-          {project.audience && (
-            <li className="project-audience">Para: {project.audience}</li>
-          )}
-        </ul>
-      )}
-
-      <button className="btn-card" onClick={handleCta}>
-        {project.status === 'live' ? cta.label : expanded ? 'Cerrar' : cta.label}
-        {project.status === 'live' && (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-            <polyline points="15 3 21 3 21 9"/>
-            <line x1="10" y1="14" x2="21" y2="3"/>
+      <div className="project-card-footer">
+        <span className="project-card-cta">
+          Ver proyecto
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
           </svg>
-        )}
-      </button>
+        </span>
+      </div>
     </article>
   )
 }

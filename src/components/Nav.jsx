@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Layers, LogOut } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
+  const { user, signOut } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -9,18 +14,33 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  async function handleLogout() {
+    await signOut()
+    navigate('/')
   }
 
   return (
-    <nav className={`nav${scrolled ? ' nav--scrolled' : ''}`}>
-      <span className="nav-logo">Builders</span>
-      <ul className="nav-links">
-        <li><button onClick={() => scrollTo('projects')}>Proyectos</button></li>
-        <li><button onClick={() => scrollTo('stack')}>Stack</button></li>
-        <li><button onClick={() => scrollTo('contact')}>Contacto</button></li>
-      </ul>
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+      <div className="nav-left"></div>
+      <Link to="/" className="nav-brand">
+        <Layers size={24} color="var(--accent-color)" />
+        Builders<span>.</span>
+      </Link>
+      <div className="nav-links">
+        {user ? (
+          <>
+            <Link to="/dashboard" className="btn btn-primary">Mi perfil</Link>
+            <button onClick={handleLogout} className="nav-logout" aria-label="Cerrar sesión">
+              <LogOut size={17} />
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="nav-link">Iniciar sesión</Link>
+            <Link to="/registro" className="btn btn-primary">Únete</Link>
+          </>
+        )}
+      </div>
     </nav>
   )
 }
